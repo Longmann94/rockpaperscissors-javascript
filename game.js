@@ -6,75 +6,84 @@ function computerPlay (gameMove) {
   return gameMove[Math.floor(Math.random() * 3)];
 }
 
-//win counter for tracking who gets to 5 first
-let cwin = 0;
 let pwin = 0;
+let cwin = 0;
+
 
 //main game logic to decide who won and return winner each time
-function gameLogic(playerPlay){
+function gameLogic(e){
 
   let computerMove = computerPlay(gameMove);
-  let playerMove = playerPlay;
+  let playerMove = e.target.id;
 
-  console.log("computer plays" + computerMove);
-  console.log("player plays" + playerMove);
+  const playerResult = document.querySelector(".player-move");
+  const npcResult = document.querySelector(".npc-move");
+  const winner = document.querySelector(".winner");
+  const playerScore = document.querySelector(".player-score");
+  const npcScore = document.querySelector(".npc-score");
+
+  playerResult.innerHTML = "You Play" + " " + playerMove;
+  npcResult.innerHTML = "Npc Play" + " " + computerMove;
+  playerScore.innerHTML = "Player Score:" + " " + pwin;
+  npcScore.innerHTML = "Npc Score:" + " " + cwin;
 
   if(playerMove == "rock"){
     if(computerMove == "rock"){
-      console.log("draw!");
+      winner.innerHTML = "Draw!";
     }
     else if (computerMove == "paper"){
-      console.log("computer wins!");
+      winner.innerHTML = "Npc Wins!";
       return cwin++;
     }
     else if(computerMove =="scissors"){
-      console.log("player wins!");
+      winner.innerHTML = "You win!";
       return pwin++;
     }
   }
 
   if(playerMove == "paper"){
     if(computerMove == "rock"){
-      console.log("player wins!");
+      winner.innerHTML = "You win!";
       return pwin++;
     }
     else if (computerMove == "paper"){
-      console.log("draw!");
+      winner.innerHTML = "draw!";
     }
     else if(computerMove =="scissors"){
-      console.log("computer wins!");
+      winner.innerHTML = "Npc Wins!";
       return cwin++;
     }
   }
 
   if(playerMove == "scissors"){
     if(computerMove == "rock"){
-      console.log("computer wins!");
+      winner.innerHTML = "Npc Wins!";
       return cwin++;
     }
     else if (computerMove == "paper"){
-      console.log("player wins!");
+      winner.innerHTML = "You win!";
       return pwin++;
     }
     else if(computerMove =="scissors"){
-      console.log("draw!");
+      winner.innerHTML = "draw!";
     }
   }
+
+//win counter for tracking who gets to 5 first
+  if(cwin > 4){
+    playerResult.innerHTML = " ";
+    npcResult.innerHTML = " ";
+    winner.innerHTML = "NPC won 5 games!";
+    window.removeEventListener("click", gameLogic);
+  }else if(pwin > 4){
+    playerResult.innerHTML = " ";
+    npcResult.innerHTML = " ";
+    winner.innerHTML = "You won 5 games!";
+    window.removeEventListener("click", gameLogic);
+  }
+
 }
 
-//loop for player and computer to enter their moves and also checks if any player has got 5 wins.
-for (let count = 0; count < 100; count++) {
 
-  let playerPlay = prompt("enter your move").toLowerCase();
-  gameLogic(playerPlay);
-  console.log(pwin);
-  console.log(cwin);
-  if (cwin > 4){
-    alert("computer won!");
-    break;
-  }
-  else if (pwin > 4){
-    alert("player won!");
-    break;
-  }
-}
+
+window.addEventListener("click", gameLogic); //listen to any click made inside the window and play that move.
